@@ -15,3 +15,7 @@ def post_api(request):
     else :
         return Response('Error', status = status.HTTP_400_BAD_REQUEST)
     
+@api_view(['GET'])
+def get_api():
+    return Response('GET!!!', status = status.HTTP_200_OK)
+    
