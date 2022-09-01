@@ -54,7 +54,7 @@ class BERTClassifier(nn.Module):
 
 
 model = BERTClassifier(bertmodel,  dr_rate=0.5).to(device)
-model.load_state_dict(torch.load("./model_state_dict.pt", map_location=device))
+model.load_state_dict(torch.load("C:/Users/user/Documents/Desktop/ssupago/ssupago_server/ai_model/model_state_dict.pt", map_location=device))
 
 # BERT 모델에 들어가기 위한 dataset을 만들어주는 클래스
 
