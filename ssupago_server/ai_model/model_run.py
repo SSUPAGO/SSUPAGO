@@ -1,11 +1,11 @@
 import torch
 from torch import nn
-import torch.nn.functional as F
-import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 import gluonnlp as nlp
 import numpy as np
-from tqdm import tqdm, tqdm_notebook
+#import torch.nn.functional as F
+#import torch.optim as optim
+#from tqdm import tqdm, tqdm_notebook
 
 
 # kobert
@@ -13,8 +13,8 @@ from kobert.utils import get_tokenizer
 from kobert.pytorch_kobert import get_pytorch_kobert_model
 
 # transformers
-from transformers import AdamW
-from transformers.optimization import get_cosine_schedule_with_warmup
+#from transformers import AdamW
+#from transformers.optimization import get_cosine_schedule_with_warmup
 
 
 # GPU 사용
@@ -23,12 +23,7 @@ bertmodel, vocab = get_pytorch_kobert_model()
 
 
 class BERTClassifier(nn.Module):
-    def __init__(self,
-                 bert,
-                 hidden_size=768,
-                 num_classes=2,
-                 dr_rate=None,
-                 params=None):
+    def __init__(self,bert,hidden_size=768,num_classes=2,dr_rate=None,params=None):
         super(BERTClassifier, self).__init__()
         self.bert = bert
         self.dr_rate = dr_rate
@@ -57,12 +52,9 @@ model = BERTClassifier(bertmodel,  dr_rate=0.5).to(device)
 model.load_state_dict(torch.load("C:/Users/user/Documents/Desktop/ssupago/ssupago_server/ai_model/model_state_dict.pt", map_location=device))
 
 # BERT 모델에 들어가기 위한 dataset을 만들어주는 클래스
-
-
 class BERTDataset(Dataset):
     def __init__(self, dataset, sent_idx, label_idx, bert_tokenizer, max_len, pad, pair):
-        transform = nlp.data.BERTSentenceTransform(
-            bert_tokenizer, max_seq_length=max_len, pad=pad, pair=pair)
+        transform = nlp.data.BERTSentenceTransform(bert_tokenizer, max_seq_length=max_len, pad=pad, pair=pair)
 
         self.sentences = [transform([i[sent_idx]]) for i in dataset]
         self.labels = [np.int32(i[label_idx]) for i in dataset]
@@ -77,39 +69,31 @@ class BERTDataset(Dataset):
 # Setting parameters
 max_len = 64
 batch_size = 64
-warmup_ratio = 0.1
-num_epochs = 5
-max_grad_norm = 1
-log_interval = 200
-learning_rate = 5e-5  # 5e-5
+#warmup_ratio = 0.1
+#num_epochs = 5
+#max_grad_norm = 1
+#log_interval = 200
+#learning_rate = 5e-5 
 
 tokenizer = get_tokenizer()
 tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
 
 
 def predict(predict_sentence):
-    model1 = model
     data = [predict_sentence, '0']
     dataset_another = [data]
 
-    another_test = BERTDataset(
-        dataset_another, 0, 1, tok, max_len, True, False)
-    final_dataloader = torch.utils.data.DataLoader(
-        another_test, batch_size=batch_size, num_workers=5)
+    req_data = BERTDataset(dataset_another, 0, 1, tok, max_len, True, False)
+    req_dataloader = DataLoader(req_data, batch_size=batch_size, num_workers=0)
 
-    model1.eval()
+    #print(model.eval())
 
-    for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(final_dataloader):
+    for token_ids, valid_length, segment_ids, label in req_dataloader:
         token_ids = token_ids.long().to(device)
         segment_ids = segment_ids.long().to(device)
-
         valid_length = valid_length
-        label = label.long().to(device)
 
-        out = model1(token_ids, valid_length, segment_ids)
+        out = model(token_ids, valid_length, segment_ids)
 
-        # test_eval=[]
-        for i in out:
-            logits = i
-            logits = logits.detach().cpu().numpy()
-            return np.argmax(logits)
+        logits = out.detach().cpu().numpy()
+        return np.argmax(logits)
