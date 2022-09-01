@@ -6,7 +6,7 @@ import numpy as np
 #import torch.nn.functional as F
 #import torch.optim as optim
 #from tqdm import tqdm, tqdm_notebook
-
+import os
 
 # kobert
 from kobert.utils import get_tokenizer
@@ -49,7 +49,7 @@ class BERTClassifier(nn.Module):
 
 
 model = BERTClassifier(bertmodel,  dr_rate=0.5).to(device)
-model.load_state_dict(torch.load("C:/Users/user/Documents/Desktop/ssupago/ssupago_server/ai_model/model_state_dict.pt", map_location=device))
+model.load_state_dict(torch.load('../ssupago_server/ai_model/model_state_dict.pt', map_location=device))
 
 # BERT 모델에 들어가기 위한 dataset을 만들어주는 클래스
 class BERTDataset(Dataset):
