@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-n4nj9%(*#8(@3$8j+^t3bc_!(uhprm9)a(dk=6_8_5dxh8!)9c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1', '54.180.81.39']
 
@@ -127,3 +127,39 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'format1': {'format': '[%(asctime)s] %(levelname)s %(message)s','datefmt': "%Y-%m-%d %H:%M:%S"},
+        'format2': {'format': '%(levelname)s %(message)s [%(name)s:%(lineno)s]'},
+    },    
+    'handlers': {
+        'file': {
+                'level': 'WARNING',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': os.path.join(BASE_DIR, 'logs/server.log'),
+                'encoding': 'UTF-8',
+                'maxBytes': 1024 * 1024 * 3,  # 3 MB
+                'backupCount': 3,
+                'formatter': 'format1',
+                },
+        # 콘솔(터미널)에 출력
+        'console': {'level': 'INFO','class': 'logging.StreamHandler','formatter': 'format2',
+        },
+    },
+    'loggers': {
+        #종류
+        'django.server': {
+            'handlers': ['file','console'],
+            'propagate': False,
+            'level': 'DEBUG',
+        },
+        'dl':{
+            'handlers': ['file','console'],
+            'propagate': False,
+            'level': 'WARNING'
+        }
+    },
+}

@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from ai_model import model_run
+import logging
+logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
 def post_api(request):
@@ -13,6 +15,7 @@ def post_api(request):
         result = model_run.predict(sentence)
         return Response(result,status=status.HTTP_200_OK)
     else :
+        logger.warning('no requested data')
         return Response('Error', status = status.HTTP_400_BAD_REQUEST)
     
 @api_view(['GET'])
