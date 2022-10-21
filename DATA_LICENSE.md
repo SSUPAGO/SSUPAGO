@@ -6,7 +6,7 @@
 2. [Korean Unsmile Dataset](https://www.apache.org/licenses/LICENSE-2.0)
 
 3. 비윤리 검증 DATA
-    - [출처 : AIHUB](https://aihub.or.kr/aihubdata/data/view.docurrMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=558)
+    - 출처 : [AIHUB](https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=558)
     - [이용약관](https://www.aihub.or.kr/intrcn/guid/usagepolicy.do?currMenu=151&topMenu=105) <br></br>
     
       
