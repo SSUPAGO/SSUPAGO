@@ -1,5 +1,5 @@
 
-DATA LICENSE
+# DATA LICENSE
 
 1. [Korean HateSpeech Dataset](https://github.com/kocohub/korean-hate-speech/blob/master/LICENSE.md)
 
